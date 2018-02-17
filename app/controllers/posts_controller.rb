@@ -43,12 +43,20 @@ class PostsController < ApplicationController
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { status: true }
+        format.json { render :nothing, status: true }
       else
         format.html { render :edit }
-        format.json { status: false }
+        format.json { render :nothing, status: false }
       end
     end
+  end
+
+
+  def post_update
+    post = Post.find(params[:post_id])
+    post.content = params[:post]
+    post.save
+    render json: {status: true}
   end
 
   # DELETE /posts/1
@@ -69,6 +77,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :content, :type)
+      params.require(:post).permit(:title, :content, :content_type)
     end
 end
