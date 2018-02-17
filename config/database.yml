@@ -8,18 +8,19 @@ default: &default
   adapter: mysql2
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  username: root
+  username: b6df5ce52bbc63
+  password: f82ebc5b
+  host: localhost
 
 development:
   <<: *default
   database: editor_development
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
 test:
   <<: *default
   database: editor_test
+
 production:
   <<: *default
-  database: editor_production
+  database: heroku_ec7331b11c15f13%
+  host: us-cdbr-iron-east-05.cleardb.net
