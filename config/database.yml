@@ -8,9 +8,8 @@ default: &default
   adapter: mysql2
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  username: b6df5ce52bbc63
-  password: f82ebc5b
   host: localhost
+  username: root
 
 development:
   <<: *default
@@ -22,5 +21,7 @@ test:
 
 production:
   <<: *default
-  database: heroku_ec7331b11c15f13%
+  username: b8e0524ab37617
+  password: 67635a3a
+  database: heroku_6c43b6c53e9ecf8%
   host: us-cdbr-iron-east-05.cleardb.net
