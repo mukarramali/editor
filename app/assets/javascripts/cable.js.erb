@@ -7,7 +7,11 @@
 
 (function() {
   this.App || (this.App = {});
-
-  App.cable = ActionCable.createConsumer();
+  console.log("Defining App.cable");
+  <% if Rails.env.production? %>
+    App.cable = ActionCable.createConsumer("<%= Rails.application.config.web_socket_server_url %>");
+  <% else %>
+    App.cable = ActionCable.createConsumer();
+  <% end %>
 
 }).call(this);

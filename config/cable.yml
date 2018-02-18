@@ -6,5 +6,9 @@ test:
 
 production:
   adapter: redis
-  url: redis://localhost:6379/1
+  url: redis://rediscloud:ItenOXxcALenPqk2@redis-13569.c14.us-east-1-3.ec2.cloud.redislabs.com:13569
+  host: redis-13569.c14.us-east-1-3.ec2.cloud.redislabs.com
+  pasword: ItenOXxcALenPqk2
+  port: 13569
   channel_prefix: editor_production
+  inline: true

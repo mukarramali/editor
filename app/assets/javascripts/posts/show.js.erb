@@ -1,0 +1,104 @@
+$(document).ready(function(){
+
+    // CREATING CODEMIRROR EDITOR
+  cEditor = CodeMirror.fromTextArea(document.getElementById("post_area"), {
+    mode: 'ruby',
+    lineNumbers: true,
+    lineWrapping: true,
+    styleActiveLine: true,
+    styleSelectedText: true,
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    foldGutter: true,
+    lint: false,
+    keyMap: 'sublime',
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
+    extraKeys: {
+      'Ctrl-Space': 'autocomplete',
+      'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); }
+    },
+    theme: 'material',
+    indentUnit: 2
+  });
+
+  cEditor.setValue($('#post_area').val());
+
+  key_stroke_count = 0;
+
+  cursorLine = 0;
+  cursorColumn = 0;
+
+  cEditor.on("change", function(cm, change) {
+    key_stroke_count++;
+    if(key_stroke_count>2){
+      key_stroke_count=0;
+      cursorLine = cEditor.getCursor().line;
+      cursorColumn = cEditor.getCursor().ch;
+      console.log("line: "+cursorLine+", col: "+cursorColumn);
+      push();
+    }
+  });
+
+  function push(){
+    var post_id = $('#post_area').data("post-id");
+    var content = cEditor.getValue();
+    $.ajax({
+    url: '/post_update',
+    data: {
+          'post' : content,
+          'post_id' : post_id
+          },
+      type: 'post',
+      dataType: 'json',
+      success: function(data){
+        if(data['status'] != true)
+          setTimeout(function(){push()}, 5000);
+      },
+      error: function(xhr, status, error) {
+        var err = JSON.parse(xhr.responseText);
+        console.log(err.Message);
+        setTimeout(function(){push()}, 5000);
+      }
+    });
+  }
+
+
+  console.log("Using App.cable");
+  App.posts = App.cable.subscriptions.create("PostsChannel", {
+    connected: function() {
+      console.log("Conected");
+      return setTimeout((function(_this) {
+        return function() {
+          _this.followCurrentPost();
+          return _this.installPageChangeCallback();
+        };
+      })(this), 1000);
+    },
+    received: function(data) {
+      cEditor.setValue(data.post.content);
+      console.log("received> line:"+cursorLine+", ch:"+cursorColumn);
+      cEditor.setCursor({line: cursorLine, ch: cursorColumn});
+      return;
+    },
+    followCurrentPost: function() {
+      var postId;
+      console.log("Following");
+      if (postId = $('#post_area').data('post-id')) {
+        return this.perform('follow_post', {
+          post_id: postId
+        });
+      } else {
+        return this.perform('unfollow_post');
+      }
+    },
+    installPageChangeCallback: function() {
+      if (!this.installedPageChangeCallback) {
+        this.installedPageChangeCallback = true;
+        return $(document).on('turbolinks:load', function() {
+          return App.posts.followCurrentPost();
+        });
+      }
+    }
+  });
+
+});
