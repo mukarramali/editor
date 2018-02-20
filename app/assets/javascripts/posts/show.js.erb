@@ -63,10 +63,8 @@ $(document).ready(function(){
   }
 
 
-  console.log("Using App.cable");
   App.posts = App.cable.subscriptions.create("PostsChannel", {
     connected: function() {
-      console.log("Conected");
       return setTimeout((function(_this) {
         return function() {
           _this.followCurrentPost();
@@ -82,7 +80,6 @@ $(document).ready(function(){
     },
     followCurrentPost: function() {
       var postId;
-      console.log("Following");
       if (postId = $('#post_area').data('post-id')) {
         return this.perform('follow_post', {
           post_id: postId
