@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/mh61503891/fingerprintjs2-rails.git
+  revision: 309da76cc71996654fde00d5c4aa9f28e6823ce0
+  specs:
+    fingerprintjs2-rails (1.4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -188,6 +194,7 @@ DEPENDENCIES
   capybara (~> 2.13)
   codemirror-rails
   coffee-rails (~> 4.2)
+  fingerprintjs2-rails!
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)

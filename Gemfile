@@ -36,6 +36,8 @@ gem 'codemirror-rails'
 
 gem 'redis'
 
+gem 'fingerprintjs2-rails', git:'https://github.com/mh61503891/fingerprintjs2-rails.git'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

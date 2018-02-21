@@ -54,7 +54,7 @@ class PostsController < ApplicationController
 
   def post_update
     post = Post.find(params[:post_id])
-    post.update!(content: params[:post])
+    post.update!(content: params[:post], updated_by: params[:updated_by])
     render json: {status: true}
   end
 

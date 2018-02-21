@@ -39,6 +39,7 @@
 //= require codemirror/keymaps/vim
 //= require codemirror/keymaps/sublime
 //= require codemirror/keymaps/emacs
+//= require fingerprint2
 //= require jquery
 //= require jquery_ujs
 //= require rails-ujs

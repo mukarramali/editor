@@ -1,5 +1,11 @@
 $(document).ready(function(){
 
+  fingerprint = '';
+
+  new Fingerprint2().get(function(result, components) {
+    fingerprint = result;
+  })
+
     // CREATING CODEMIRROR EDITOR
   cEditor = CodeMirror.fromTextArea(document.getElementById("post_area"), {
     mode: 'ruby',
@@ -34,7 +40,6 @@ $(document).ready(function(){
       key_stroke_count=0;
       cursorLine = cEditor.getCursor().line;
       cursorColumn = cEditor.getCursor().ch;
-      console.log("line: "+cursorLine+", col: "+cursorColumn);
       push();
     }
   });
@@ -46,7 +51,8 @@ $(document).ready(function(){
     url: '/post_update',
     data: {
           'post' : content,
-          'post_id' : post_id
+          'post_id' : post_id,
+          'updated_by' : fingerprint
           },
       type: 'post',
       dataType: 'json',
@@ -62,7 +68,6 @@ $(document).ready(function(){
     });
   }
 
-
   App.posts = App.cable.subscriptions.create("PostsChannel", {
     connected: function() {
       return setTimeout((function(_this) {
@@ -73,9 +78,10 @@ $(document).ready(function(){
       })(this), 1000);
     },
     received: function(data) {
-      cEditor.setValue(data.post.content);
-      console.log("received> line:"+cursorLine+", ch:"+cursorColumn);
-      cEditor.setCursor({line: cursorLine, ch: cursorColumn});
+      if(fingerprint != data.post.updated_by){
+        cEditor.setValue(data.post.content);
+        cEditor.setCursor({line: cursorLine, ch: cursorColumn});
+      }
       return;
     },
     followCurrentPost: function() {
