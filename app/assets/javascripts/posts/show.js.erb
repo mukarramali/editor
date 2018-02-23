@@ -34,7 +34,7 @@ $(document).ready(function(){
   cursorLine = 0;
   cursorColumn = 0;
 
-  cEditor.on("change", function(cm, change) {
+  cEditor.on("keyup", function(cm, change) {
     key_stroke_count++;
     if(key_stroke_count>2){
       key_stroke_count=0;
@@ -72,13 +72,16 @@ $(document).ready(function(){
     connected: function() {
       return setTimeout((function(_this) {
         return function() {
+          // console.log("connected");
           _this.followCurrentPost();
           return _this.installPageChangeCallback();
         };
       })(this), 1000);
     },
     received: function(data) {
+          // console.log("received");
       if(fingerprint != data.post.updated_by){
+          // console.log("updating");
         cEditor.setValue(data.post.content);
         cEditor.setCursor({line: cursorLine, ch: cursorColumn});
       }
@@ -86,6 +89,8 @@ $(document).ready(function(){
     },
     followCurrentPost: function() {
       var postId;
+      // console.log("following");
+
       if (postId = $('#post_area').data('post-id')) {
         return this.perform('follow_post', {
           post_id: postId
