@@ -1,16 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Editor</title>
+    <title>Cupidor</title>
     <%= csrf_meta_tags %>
 
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <link rel="manifest" href="/manifest.json" />
-<meta name="apple-mobile-web-app-capable" content="yes"></head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Cupidor</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><%= link_to 'Find', posts_path %></li>
+
+          <li><%= link_to 'New', new_post_path %></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="https://github.com/mukarramali/editor">Source Code</a></li>
+          <button id="btn-collaorate" class="btn btn-danger navbar-btn">Collaborate</button>
+        </ul>
+      </div>
+    </nav>
+    <div id="codelayout" style="margin-bottom: 0px; height: 100%;">
+      <%= yield %>
+    </div>
+
   </body>
 </html>
